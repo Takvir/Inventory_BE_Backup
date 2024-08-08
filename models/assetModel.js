@@ -34,10 +34,10 @@ const getAssetsByBranchId = async (branchId) => {
 };
 
 const createAsset = async (asset) => {
-    const { branch_id, branch_name, group_id, desktop_name, configuration, tag_name, warranty, price, purchase_date, status, asset_get_by, serial_number } = asset;
+    const { branch_id, branch_name, group_id, desktop_name, configuration, tag_name, warranty, price, purchase_date, status, asset_get_by, serial_number, sub_branch } = asset;
     const [result] = await pool.execute(
-        'INSERT INTO asset (branch_id, branch_name, group_id, desktop_name, configuration, tag_name, warranty, price, purchase_date, status, asset_get_by, serial_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [branch_id, branch_name, group_id, desktop_name, configuration, tag_name || null, warranty, price, purchase_date, status, asset_get_by, serial_number]
+        'INSERT INTO asset (branch_id, branch_name, group_id, desktop_name, configuration, tag_name, warranty, price, purchase_date, status, asset_get_by, serial_number, sub_branch) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [branch_id, branch_name, group_id, desktop_name, configuration, tag_name || null, warranty, price, purchase_date, status, asset_get_by, serial_number, sub_branch]
     );
 
     // Decrement stock_in_hand in group table
@@ -47,13 +47,12 @@ const createAsset = async (asset) => {
 };
 
 const updateAsset = async (id, asset) => {
-    const { branch_id, branch_name, group_id, desktop_name, configuration, tag_name, warranty, price, purchase_date, status, asset_get_by, serial_number } = asset;
+    const { branch_id, branch_name, group_id, desktop_name, configuration, tag_name, warranty, price, purchase_date, status, asset_get_by, serial_number, sub_branch } = asset;
     await pool.execute(
-        'UPDATE asset SET branch_id = ?, branch_name = ?, group_id = ?, desktop_name = ?, configuration = ?, tag_name = ?, warranty = ?, price = ?, purchase_date = ?, status = ?, asset_get_by = ?, serial_number = ? WHERE asset_id = ?',
-        [branch_id, branch_name, group_id, desktop_name, configuration, tag_name, warranty, price, purchase_date, status, asset_get_by, serial_number, id]
+        'UPDATE asset SET branch_id = ?, branch_name = ?, group_id = ?, desktop_name = ?, configuration = ?, tag_name = ?, warranty = ?, price = ?, purchase_date = ?, status = ?, asset_get_by = ?, serial_number = ?, sub_branch = ? WHERE asset_id = ?',
+        [branch_id, branch_name, group_id, desktop_name, configuration, tag_name, warranty, price, purchase_date, status, asset_get_by, serial_number, sub_branch, id]
     );
 };
-
 const deleteAsset = async (id) => {
     await pool.execute('DELETE FROM asset WHERE asset_id = ?', [id]);
 };

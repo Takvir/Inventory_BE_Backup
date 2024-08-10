@@ -60,6 +60,17 @@ router.get('/group/:groupId', async (req, res) => {
     }
 });
 
+// Get assets by branch, group, and sub_branch
+router.get('/branch/:branchId/group/:groupId/sub_branch/:subBranch', async (req, res) => {
+    const { branchId, groupId, subBranch } = req.params;
+    try {
+        const assets = await assetModel.getAssetsByBranchGroupAndSubBranch(branchId, groupId, subBranch);
+        res.json(assets);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 // Create asset
 router.post('/', async (req, res) => {
     const asset = req.body;
@@ -109,6 +120,16 @@ router.get('/count/branch-group', async (req, res) => {
     try {
         const assetCount = await assetModel.getAssetCountByBranchAndGroup();
         res.json(assetCount);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.get('/branch/:branchId/sub_branch/:subBranch', async (req, res) => {
+    const { branchId, subBranch } = req.params;
+    try {
+        const assets = await assetModel.getAssetsByBranchAndSubBranch(branchId, subBranch);
+        res.json(assets);
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
     }

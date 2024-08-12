@@ -38,12 +38,19 @@ const getUserByUsername = async (username) => {
 const authenticateUser = async (username, password) => {
     const user = await getUserByUsername(username);
     if (user && await bcrypt.compare(password, user.password)) {
-        const token = jwt.sign({ id: user.id, user_type: user.user_type }, 'your_jwt_secret_key', { expiresIn: '1h' });
-        return { token, user_type: user.user_type };
+        const token = jwt.sign(
+            { id: user.id, user_type: user.user_type, branch_id: user.branch_id }, // Ensure branch_id is included
+            'your_jwt_secret_key',
+            { expiresIn: '1h' }
+        );
+        return { token, user_type: user.user_type, branch_id: user.branch_id }; // Ensure branch_id is included in the response
     } else {
         throw new Error('Invalid credentials');
     }
 };
+
+
+
 
 module.exports = {
     getAllUsers,

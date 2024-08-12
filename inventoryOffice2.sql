@@ -36,7 +36,7 @@ CREATE TABLE `asset` (
   `price` decimal(10,2) DEFAULT NULL,
   `purchase_date` date DEFAULT NULL,
   `status` enum('Active','InActive','Faulty') NOT NULL,
-  `asset_get_by` enum('Purchase','Gift') NOT NULL,
+  `asset_get_by` varchar(255) DEFAULT NULL,
   `serial_number` varchar(255) NOT NULL,
   `group_name` varchar(255) DEFAULT NULL,
   `sub_branch` varchar(255) DEFAULT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE `asset` (
   KEY `group_id` (`group_id`),
   CONSTRAINT `asset_ibfk_1` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_id`),
   CONSTRAINT `asset_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -54,7 +54,7 @@ CREATE TABLE `asset` (
 
 LOCK TABLES `asset` WRITE;
 /*!40000 ALTER TABLE `asset` DISABLE KEYS */;
-INSERT INTO `asset` VALUES (1,1103,'Pragati Sharani Branch',2,'HP ','I5 12 gen','Will Be Done','2026-06-11',1500.00,'2024-08-06','Active','Purchase','456465564564',NULL,'N/A'),(2,1101,'Head Office',1,'HP ','I5 12 gen','MMBL-9880','2024-08-01',1500.00,'2024-08-02','Active','Purchase','5443554543',NULL,'ICT'),(3,1113,'Aganagar Branch',6,'Dell Laptop','I5 12 gen','Will Be Done','2024-08-05',5222.00,'2024-08-05','Active','Purchase','456465564564',NULL,'N/A'),(4,1110,'Shambhugonj Branch',6,'Server 99','I5 12 gen','Will Be Done','2024-08-12',550.00,'2024-08-06','InActive','Purchase','5443554543',NULL,'N/A'),(5,1101,'Head Office',5,'Dell Laptop','Monitor 14 inch','MMBL 3214','2024-08-04',1500.00,'2024-08-05','Active','Purchase','5443554543',NULL,'ICT'),(6,1114,'Bheramara Branch',8,'Server 99','14 Inch','Will Be Done','2024-08-15',5222.00,'2024-08-07','Active','Purchase','5443554543',NULL,'N/A'),(7,1112,'Mirpur Branch',6,'Server 3','14 Inch','Will Be Done','2024-08-07',5222.00,'2024-08-06','InActive','Purchase','5443554543',NULL,'N/A'),(8,1101,'Head Office',6,'Dell Laptop','Monitor 14 inch','Will Be Done','2024-08-07',5222.00,'2024-08-07','Active','Purchase','5443554543',NULL,'AML & CFT'),(9,1102,'Gulshan Branch',9,'Dell Laptop','14 Inch','MMBL 123','2024-07-30',5222.00,'2024-08-05','Active','Purchase','5443554543',NULL,'Select Division'),(10,1116,'Kalia Branch',7,'Dell Laptop','I5 12 gen','MMBL GGH','2024-08-01',550.00,'2024-08-07','Active','Purchase','5443554543',NULL,'N/A'),(11,1114,'Bheramara Branch',9,'Server 2','14 Inch','Will Be Done','2024-08-06',1500.00,'2024-08-06','Active','Purchase','5443554543',NULL,'N/A'),(13,1108,'Kanchon Branch',9,'Server 3','Monitor 14 inch','Will Be Done','2024-08-10',5222.00,'2024-08-01','Faulty','Purchase','5443554543',NULL,'N/A'),(14,1114,'Bheramara Branch',9,'Online UPS','6 k','MMBL 123','2024-09-24',15000.00,'2024-08-10','Active','Purchase','456465564564',NULL,'N/A');
+INSERT INTO `asset` VALUES (1,1109,'Pirgonj Branch',10,'Server 2','Core I5','Will Be Done','2024-08-06',1500.00,'2024-08-06','Active','Smart Technologies','5443554543',NULL,'N/A');
 /*!40000 ALTER TABLE `asset` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -103,8 +103,35 @@ CREATE TABLE `group` (
 
 LOCK TABLES `group` WRITE;
 /*!40000 ALTER TABLE `group` DISABLE KEYS */;
-INSERT INTO `group` VALUES (1,'Laptop',14),(2,'Full Desktop',49),(3,'CPU',70),(4,'Keyboard',15),(5,'Mouse',19),(6,'Monitor',33),(7,'Router',19),(8,'Ip Phone',24),(9,'Online UPS',27),(10,'Scanner',20),(12,'Server',19),(13,'Internet Router',20),(14,'Core Router',30),(15,'Printer',50),(16,'Scanner (E-Doc)',5);
+INSERT INTO `group` VALUES (1,'Laptop',11),(2,'Full Desktop',49),(3,'CPU',70),(4,'Keyboard',13),(5,'Mouse',18),(6,'Monitor',33),(7,'Router',19),(8,'Ip Phone',23),(9,'Online UPS',26),(10,'Scanner',19),(12,'Server',19),(13,'Internet Router',19),(14,'Core Router',29),(15,'Printer',50),(16,'Scanner (E-Doc)',4);
 /*!40000 ALTER TABLE `group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `branch_id` int(11) DEFAULT NULL,
+  `user_type` enum('superadmin','admin','branch') NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (4,'Takvir','$2b$10$gy1nRAAJ2YPmZfcVmBnn8umkyoM1IkuEdT8cEJp57hyz3PXAIk2Q2',1000,'superadmin'),(5,'gulshan','$2b$10$SYWZrih2iD2KVAeDHI87kuQezNkpc5IQDr1vlVjSmcQUMRZBPFTxu',1102,'branch');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -116,4 +143,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-11 17:50:19
+-- Dump completed on 2024-08-12 18:14:16

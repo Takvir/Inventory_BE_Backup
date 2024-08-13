@@ -76,7 +76,14 @@ const createAsset = async (asset) => {
     // Decrement stock_in_hand in group table if status is Active
     if (status === 'Active') {
         await groupModel.decrementStockInHand(group_id, 1);
+    }  
+    else if (status === 'InActive') {
+        await groupModel.decrementStockInHand(group_id, 1);
     }
+    else if (status === 'Faulty') {
+        await groupModel.decrementStockInHand(group_id, 1);
+    }    
+
 
     return { id: result.insertId, ...asset };
 };
@@ -99,6 +106,21 @@ const updateAsset = async (id, asset) => {
 
     // If the status changes from Active to InActive or Faulty, increment stock_in_hand (optional, if you want to track available stock)
     if (currentStatus === 'Active' && status !== 'Active') {
+        await groupModel.incrementStockInHand(group_id, 1);
+    }
+
+    if (status === 'InActive' && currentStatus !== 'InActive') {
+        await groupModel.decrementStockInHand(group_id, 1);
+    }
+
+    if (currentStatus === 'InActive' && status !== 'InActive') {
+        await groupModel.incrementStockInHand(group_id, 1);
+    }
+    if (status === 'Faulty' && currentStatus !== 'Faulty') {
+        await groupModel.decrementStockInHand(group_id, 1);
+    }
+
+    if (currentStatus === 'Faulty' && status !== 'Faulty') {
         await groupModel.incrementStockInHand(group_id, 1);
     }
 };

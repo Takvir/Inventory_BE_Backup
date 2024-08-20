@@ -9,6 +9,8 @@ const authRoutes = require('./routes/auth');
 
 const app = express();
 const port = 3000;
+const host =  '11.11.7.41';
+
 
 app.use(cors());
 app.use(express.json());

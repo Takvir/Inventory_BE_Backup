@@ -67,10 +67,10 @@ const getAssetsByBranchGroupAndSubBranch = async (branchId, groupId, subBranch) 
 };
 
 const createAsset = async (asset) => {
-    const { branch_id, branch_name, group_id, desktop_name, configuration, tag_name, warranty, price, purchase_date, status, asset_get_by, serial_number, sub_branch } = asset;
+    const { branch_id, branch_name, group_id, desktop_name, configuration, tag_name, warranty, price, purchase_date, status, asset_get_by, serial_number, sub_branch, OS, RAM, Storage, work_order, challan_no } = asset;
     const [result] = await pool.execute(
-        'INSERT INTO asset (branch_id, branch_name, group_id, desktop_name, configuration, tag_name, warranty, price, purchase_date, status, asset_get_by, serial_number, sub_branch) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [branch_id, branch_name, group_id, desktop_name, configuration, tag_name || null, warranty, price, purchase_date, status, asset_get_by, serial_number, sub_branch]
+        'INSERT INTO asset (branch_id, branch_name, group_id, desktop_name, configuration, tag_name, warranty, price, purchase_date, status, asset_get_by, serial_number, sub_branch, OS, RAM, Storage, work_order, challan_no) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [branch_id, branch_name, group_id, desktop_name, configuration, tag_name || null, warranty, price, purchase_date, status, asset_get_by, serial_number, sub_branch,OS,RAM,Storage,work_order,challan_no]
     );
 
     // Decrement stock_in_hand in group table if status is Active
@@ -89,14 +89,16 @@ const createAsset = async (asset) => {
 };
 
 const updateAsset = async (id, asset) => {
-    const { branch_id, branch_name, group_id, desktop_name, configuration, tag_name, warranty, price, purchase_date, status, asset_get_by, serial_number, sub_branch } = asset;
+    const { branch_id, branch_name, group_id, desktop_name, configuration, tag_name, warranty, price, purchase_date, status, asset_get_by, serial_number, sub_branch, OS, RAM, Storage, work_order, challan_no } = asset;
+
     // Retrieve the current status of the asset before updating
     const [currentAssetRows] = await pool.query('SELECT status FROM asset WHERE asset_id = ?', [id]);
     const currentStatus = currentAssetRows[0]?.status;
 
+    // Update the asset
     await pool.execute(
-        'UPDATE asset SET branch_id = ?, branch_name = ?, group_id = ?, desktop_name = ?, configuration = ?, tag_name = ?, warranty = ?, price = ?, purchase_date = ?, status = ?, asset_get_by = ?, serial_number = ?, sub_branch = ? WHERE asset_id = ?',
-        [branch_id, branch_name, group_id, desktop_name, configuration, tag_name, warranty, price, purchase_date, status, asset_get_by, serial_number, sub_branch, id]
+        'UPDATE asset SET branch_id = ?, branch_name = ?, group_id = ?, desktop_name = ?, configuration = ?, tag_name = ?, warranty = ?, price = ?, purchase_date = ?, status = ?, asset_get_by = ?, serial_number = ?, sub_branch = ?, OS = ?, RAM = ?, Storage = ?, work_order = ?, challan_no = ? WHERE asset_id = ?',
+        [branch_id, branch_name, group_id, desktop_name, configuration, tag_name, warranty, price, purchase_date, status, asset_get_by, serial_number, sub_branch, OS, RAM, Storage, work_order, challan_no, id]
     );
 
     // If the status changes to Active, decrement stock_in_hand
@@ -116,6 +118,7 @@ const updateAsset = async (id, asset) => {
     if (currentStatus === 'InActive' && status !== 'InActive') {
         await groupModel.incrementStockInHand(group_id, 1);
     }
+
     if (status === 'Faulty' && currentStatus !== 'Faulty') {
         await groupModel.decrementStockInHand(group_id, 1);
     }

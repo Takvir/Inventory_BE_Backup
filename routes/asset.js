@@ -79,6 +79,8 @@ router.post('/', async (req, res) => {
         res.status(201).json(newAsset);
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
+        console.log(error);
+        
     }
 });
 
@@ -91,6 +93,9 @@ router.put('/:id', async (req, res) => {
         res.json({ id, ...asset });
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
+        console.log(error
+            
+        )
     }
 });
 
@@ -125,6 +130,7 @@ router.get('/count/branch-group', async (req, res) => {
     }
 });
 
+// Get assets by branch and sub-branch
 router.get('/branch/:branchId/sub_branch/:subBranch', async (req, res) => {
     const { branchId, subBranch } = req.params;
     try {

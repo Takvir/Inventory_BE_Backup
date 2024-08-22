@@ -11,14 +11,14 @@ const getBranchById = async (id) => {
 };
 
 const createBranch = async (branch) => {
-    const { branch_id, branch_name } = branch;
-    const [result] = await pool.execute('INSERT INTO branch (branch_id, branch_name) VALUES (?, ?)', [branch_id, branch_name]);
+    const { branch_id, branch_name, employee_number } = branch;
+    const [result] = await pool.execute('INSERT INTO branch (branch_id, branch_name, employee_number) VALUES (?, ?, ?)', [branch_id, branch_name, employee_number]);
     return { id: branch_id, branch_name };
 };
 
 const updateBranch = async (id, branch) => {
-    const { branch_name } = branch;
-    await pool.execute('UPDATE branch SET branch_name = ? WHERE branch_id = ?', [branch_name, id]);
+    const { branch_name, employee_number } = branch;
+    await pool.execute('UPDATE branch SET branch_name = ?, employee_number = ?  WHERE branch_id = ?', [branch_name, employee_number, id]);
 };
 
 const deleteBranch = async (id) => {

@@ -5,6 +5,7 @@ const groupRoutes = require('./routes/group');
 const assetRoutes = require('./routes/asset');
 const userRoutes = require('./routes/user');
 const authRoutes = require('./routes/auth');
+const repairRoutes = require('./routes/repair');
 
 
 const app = express();
@@ -20,6 +21,7 @@ app.use('/api/groups', groupRoutes);
 app.use('/api/assets', assetRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/repairs', repairRoutes);
 
 
 
